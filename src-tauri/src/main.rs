@@ -15,8 +15,8 @@ fn greet(name: &str) -> String {
 
 fn start_backend(receiver: Receiver<i32>) {
     // `new_sidecar()` expects just the filename, NOT the whole path
-    let t: TCommand = TCommand::new_sidecar("run_server")
-        .expect("[Error] Failed to create `run_server` binary command");
+    let t: TCommand = TCommand::new_sidecar("run-server")
+        .expect("[Error] Failed to create `run-server` binary command");
     let mut group = Command::from(t)
         .group_spawn()
         .expect("[Error] spawning api server process.");
