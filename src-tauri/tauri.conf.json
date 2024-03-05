@@ -30,6 +30,9 @@
             "sidecar": true
           }
         ]
+      },
+      "notification": {
+        "all": true
       }
     },
     "bundle": {
