@@ -1,22 +1,31 @@
 <script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import Account from "./components/Account.vue";
+import { ref } from 'vue';
+import AccountModal from './components/AccountModal.vue';
+import Account from './components/Account.vue';
+
+const accountModal = ref(null);
+
+function openModal() {
+  accountModal.value.open();
+}
 </script>
 
 <template>
-  <div class="container">    
-    <h2> 계좌 등록하기 </h2>
-    <Account />
+  <div id="app">
+    <div class="button-container">
+      <button @click="openModal">계좌 등록하기</button>
+    </div>
+
+    <AccountModal ref="accountModal">
+      <Account />
+    </AccountModal>
   </div>
 </template>
 
-<style scoped>
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #249b73);
+<style>
+.button-container {
+  display: flex;
+  justify-content: flex-end; /* 우측 정렬 */
+  padding: 20px; /* 상단 및 우측 여백 */
 }
 </style>
