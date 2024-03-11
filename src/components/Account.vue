@@ -47,3 +47,9 @@ async function submitAccount() {
   </div>
 </template>
 
+<style>
+input {
+  margin-right: 10px; /* 상하좌우 마진 설정 */
+  width: calc(100% - 20px); /* 양쪽 마진을 고려한 너비 설정 */
+}
+</style>
