@@ -14,7 +14,7 @@
       </thead>
       <tbody>
         <tr v-for="position in portfolio.positions" :key="position.symbol">
-          <td>{{ position.symbol }}</td>
+          <td>{{ position.asset.label }}</td>
           <td>{{ position.quantity }}</td>
           <td>{{ toCurrency(position.average_buy_price) }}</td>
           <td>{{ toCurrency(position.total_amount) }}</td>
@@ -51,7 +51,11 @@ function transformPortfolioData(data) {
 
   // 현금 잔액을 positions 배열에 추가
   positionsCopy.push({
-    symbol: '현금',
+    asset: {
+      label: '현금',
+      symbol: 'CASH',
+      asset_class: 'CASH'
+    },
     quantity: '-',
     sellable_quantity: '-',
     average_buy_price: '-',

@@ -2,6 +2,8 @@
 import { ref, reactive } from "vue";
 import axios from 'axios';
 
+const emit = defineEmits(['btn-close-clicked']);
+
 const accountData = reactive({
   brokerage: '',
   app_key: '',
@@ -19,6 +21,10 @@ async function submitAccount() {
     console.error('계좌 등록에 실패했습니다:', error);
     accountSubmissionResultMessage.value = '계좌 등록에 실패했습니다.';
   }
+}
+
+function btnCloseClicked() {
+  emit('btn-close-clicked');
 }
 </script>
 
@@ -42,6 +48,7 @@ async function submitAccount() {
         <input id="secretKey" v-model="accountData.secret_key" type="password" required>
       </div>
       <button type="submit">계좌 등록</button>
+      <button @click="btnCloseClicked">닫기</button>
       <p v-if="accountSubmissionResultMessage">{{ accountSubmissionResultMessage }}</p>
     </form>
   </div>
