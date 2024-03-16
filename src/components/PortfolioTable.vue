@@ -2,6 +2,22 @@
   <div>
     <h2>포트폴리오</h2>
     <p v-if="portfolio">총 가치: {{ toCurrency(portfolio.total_value) }}</p>
+    <div class="segmented-bar-container">
+      <!-- 자산군별 비중을 나타내는 각 세그먼트 -->
+      <div v-for="group in groupedAssets" :key="group.name" class="segmented-bar"
+        :style="{ width: group.percentage * 100 + '%', backgroundColor: getColorForAssetClass(group.name), 'border-radius': '5px' }"
+        :title="`${translateAssetClassName(group.name)}: ${toPercentage(group.percentage)}`"
+        :data-label="`${translateAssetClassName(group.name)}: ${toPercentage(group.percentage)}`">
+      </div>
+    </div>
+
+    <div class="asset-labels">
+      <span v-for="group in groupedAssets" :key="group.name" class="asset-label">
+        <span class="color-indicator" :style="{ backgroundColor: getColorForAssetClass(group.name) }"></span>
+        {{ translateAssetClassName(group.name) }}: {{ toPercentage(group.percentage) }}
+      </span>
+    </div>
+
     <table v-if="portfolio && portfolio.positions && portfolio.positions.length > 0">
       <thead>
         <tr>
@@ -171,6 +187,16 @@ function translateAssetClassName(className) {
   return nameMap[className] || className;
 }
 
+function getColorForAssetClass(assetClass) {
+  const colors = {
+    STOCK: '#3498db',
+    BOND: '#9b59b6',
+    CASH: '#2ecc71',
+    COMMODITY: '#f1c40f',
+    OTHER: '#e74c3c'
+  };
+  return colors[assetClass] || '#bdc3c7'; // 기본 색상 설정
+}
 
 </script>
 
@@ -206,5 +232,40 @@ tr.group:hover {
 
   margin-right: 16px;
   /* 오른쪽에 8px 간격 추가 */
+}
+
+.segmented-bar-container {
+  display: flex;
+  width: 100%;
+  height: 10px;
+  gap: 4px;
+  background-color: #ecf0f1;
+  /* 기본 배경 색상, 필요에 따라 조정 */
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.color-indicator {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  /* 라벨과의 간격 */
+}
+
+.asset-labels {
+  display: flex;
+  gap: 20px;
+  padding-top: 4px;
+  margin-bottom: 8px;
+}
+
+.asset-label {
+  font-size: 0.8em;
+  color: #666;
+  display: flex;
+  align-items: center;
+  /* 중앙 정렬 */
 }
 </style>
