@@ -14,13 +14,17 @@
       <tbody>
         <template v-for="group in groupedAssets" :key="group.name">
           <tr @click="toggleGroup(group.name)">
-            <td><strong>{{ translateAssetClassName(group.name) }}</strong></td>
+            <td>
+              <font-awesome-icon :icon="isVisible(group.name) ? 'chevron-down' : 'chevron-right'" class="icon-space" />
+              <strong>{{ translateAssetClassName(group.name) }}</strong> · <span style="color: #aaa;">{{
+                group.positions.length }}</span>
+            </td>
             <td>{{ toPercentage(group.percentage) }}</td>
             <td>{{ toCurrency(group.total_value) }}</td>
             <td>{{ toPercentage(group.average_rtn) }}</td>
           </tr>
           <tr v-if="isVisible(group.name)" v-for="asset in group.positions" :key="asset.asset.symbol">
-            <td>— {{ asset.asset.label }}</td>
+            <td>{{ asset.asset.label }}</td>
             <td>{{ toPercentage(calcWeight(asset.total_amount, portfolio.total_value)) }}</td>
             <td>{{ toCurrency(asset.total_amount) }}</td>
             <td>{{ toPercentage(asset.rtn) }}</td>
@@ -185,5 +189,22 @@ td {
 
 th {
   background-color: #f2f2f2;
+}
+
+tr.group:hover {
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.asset-count {
+  color: #888;
+  font-size: 0.9em;
+}
+
+.icon-space {
+  color: #888;
+
+  margin-right: 16px;
+  /* 오른쪽에 8px 간격 추가 */
 }
 </style>
