@@ -1,30 +1,18 @@
 <template>
-    <div class="modal-backdrop" v-if="isVisible" @click.self="close">
+    <div class="modal-backdrop" @click.self="onBackdropClicked()">
       <div class="modal-content">
         <slot></slot> <!-- Account 컴포넌트를 여기에 삽입합니다 -->
       </div>
     </div>
   </template>
   
-  <script>
-  import { ref } from 'vue';
-  
-  export default {
-    setup() {
-      const isVisible = ref(false);
-  
-      function open() {
-        isVisible.value = true;
-      }
-  
-      function close() {
-        isVisible.value = false;
-      }
-  
-      return { isVisible, open, close };
-    }
-  };
-  </script>
+<script setup>
+const emit = defineEmits(['close']);
+
+function onBackdropClicked() {
+  emit('on-backdrop-clicked');
+}
+</script>
   
   <style>
   .modal-backdrop {
