@@ -17,15 +17,15 @@ function closeModal() {
 
 <template>
   <div id="app">
-    
+
     <div class="button-container">
       <button @click="openModal">계좌 등록하기</button>
     </div>
-    
-    <AccountModal v-if="isModalOpen"  @on-backdrop-clicked="closeModal"  ref="accountModal">
+
+    <AccountModal v-if="isModalOpen" @on-backdrop-clicked="closeModal" ref="accountModal">
       <Account @btn-close-clicked="closeModal" />
     </AccountModal>
-    
+
     <PortfolioTable />
   </div>
 </template>
@@ -33,7 +33,9 @@ function closeModal() {
 <style>
 .button-container {
   display: flex;
-  justify-content: flex-end; /* 우측 정렬 */
-  padding: 20px; /* 상단 및 우측 여백 */
+  justify-content: flex-end;
+  /* 우측 정렬 */
+  padding: 20px;
+  /* 상단 및 우측 여백 */
 }
 </style>
