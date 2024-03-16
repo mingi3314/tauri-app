@@ -14,7 +14,7 @@
       <tbody>
         <template v-for="group in groupedAssets" :key="group.name">
           <tr @click="toggleGroup(group.name)">
-            <td><strong>{{ group.name }}</strong></td>
+            <td><strong>{{ translateAssetClassName(group.name) }}</strong></td>
             <td>{{ toPercentage(group.percentage) }}</td>
             <td>{{ toCurrency(group.total_value) }}</td>
             <td>{{ toPercentage(group.average_rtn) }}</td>
@@ -34,13 +34,25 @@
 
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 
-const portfolio = ref({ total_value: 0, positions: [] });
-const groupedAssets = ref([]);
-
+const portfolio = ref(null);
 const showDetails = ref({});
+
+onMounted(async () => {
+  portfolio.value = await fetchPortfolioData();
+});
+
+const groupedAssets = computed(() => {
+  if (!portfolio.value) return [];
+  // portfolio 데이터를 변환하고 자산군별로 그룹화합니다.
+  const data = transformPortfolioData(portfolio.value);
+  let assetGroups = groupAssetsByClass(data.positions, data.total_value);
+  // 그룹화된 자산군을 비중에 따라 정렬합니다.
+  return sortAssetGroups(assetGroups);
+});
+
 
 function toggleGroup(groupName) {
   showDetails.value[groupName] = !showDetails.value[groupName];
@@ -121,17 +133,41 @@ function groupAssetsByClass(positions, totalValue) {
   return Object.values(assetGroups); // 배열로 변환하여 반환합니다.
 }
 
-onMounted(async () => {
+function sortAssetGroups(assetGroups) {
+  // 자산군을 비중에 따라 정렬합니다.
+  assetGroups.sort((a, b) => b.percentage - a.percentage);
+
+  // 각 자산군 내의 자산들을 비중에 따라 정렬합니다.
+  assetGroups.forEach(group => {
+    group.positions.sort((a, b) => b.percentage - a.percentage);
+  });
+
+  return assetGroups;
+}
+
+async function fetchPortfolioData() {
   try {
     const response = await axios.get('http://localhost:8000/portfolio');
-    // 데이터 변환 함수를 호출하여 현금 잔액을 포함한 포트폴리오 데이터를 생성
-    const transformedData = transformPortfolioData(response.data);
-    portfolio.value = transformedData;
-    groupedAssets.value = groupAssetsByClass(portfolio.value.positions, portfolio.value.total_value);
+    return response.data;
   } catch (error) {
     console.error("포트폴리오 데이터를 가져오는데 실패했습니다.", error);
+    return null; // 오류 발생 시 null 반환
   }
-});
+}
+
+function translateAssetClassName(className) {
+  const nameMap = {
+    "STOCK": "주식",
+    "BOND": "채권",
+    "CASH": "현금성 자산",
+    "COMMODITY": "원자재",
+    "OTHER": "기타"
+  };
+
+  return nameMap[className] || className;
+}
+
+
 </script>
 
 <style>
