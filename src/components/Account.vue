@@ -47,8 +47,10 @@ function btnCloseClicked() {
         <label for="secretKey">SECRET_KEY:</label>
         <input id="secretKey" v-model="accountData.secret_key" type="password" required>
       </div>
-      <button type="submit">계좌 등록</button>
-      <button @click="btnCloseClicked">닫기</button>
+      <div class="button-group">
+        <button @click="btnCloseClicked">닫기</button>
+        <button type="submit">계좌 등록</button>
+      </div>
       <p v-if="accountSubmissionResultMessage">{{ accountSubmissionResultMessage }}</p>
     </form>
   </div>
@@ -56,7 +58,21 @@ function btnCloseClicked() {
 
 <style>
 input {
-  margin-right: 10px; /* 상하좌우 마진 설정 */
-  width: calc(100% - 20px); /* 양쪽 마진을 고려한 너비 설정 */
+  margin-right: 10px;
+  /* 상하좌우 마진 설정 */
+  width: calc(100% - 20px);
+  /* 양쪽 마진을 고려한 너비 설정 */
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.button-group button {
+  flex: 1;
+  /* 버튼들이 동일한 너비를 가지도록 설정 */
+  margin: 5px;
 }
 </style>
