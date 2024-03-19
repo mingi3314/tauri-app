@@ -18,37 +18,13 @@
       </span>
     </div>
 
-    <table v-if="portfolio && portfolio.positions && portfolio.positions.length > 0">
-      <thead>
-        <tr>
-          <th>이름</th>
-          <th>비중</th>
-          <th>가치</th>
-          <th>수익률</th>
-        </tr>
-      </thead>
-      <tbody>
-        <template v-for="group in groupedAssets" :key="group.name">
-          <tr @click="toggleGroup(group.name)">
-            <td>
-              <font-awesome-icon :icon="isVisible(group.name) ? 'chevron-down' : 'chevron-right'" class="icon-space" />
-              <strong>{{ translateAssetClassName(group.name) }}</strong> · <span style="color: #aaa;">{{
-                group.positions.length }}</span>
-            </td>
-            <td>{{ toPercentage(group.percentage) }}</td>
-            <td>{{ toCurrency(group.total_value) }}</td>
-            <td>{{ toPercentage(group.average_rtn) }}</td>
-          </tr>
-          <tr v-if="isVisible(group.name)" v-for="asset in group.positions" :key="asset.asset.symbol">
-            <td>{{ asset.asset.label }}</td>
-            <td>{{ toPercentage(calcWeight(asset.total_amount, portfolio.total_value)) }}</td>
-            <td>{{ toCurrency(asset.total_amount) }}</td>
-            <td>{{ toPercentage(asset.rtn) }}</td>
-          </tr>
-        </template>
-      </tbody>
-    </table>
-    <p v-else>포트폴리오 정보를 불러오는 중...</p>
+    <TreeTable :value="treeTableData">
+      <Column field="name" header="이름" expander></Column>
+      <Column field="percentage" header="비중"></Column>
+      <Column field="total_value" header="가치"></Column>
+      <Column field="rtn" header="수익률"></Column>
+    </TreeTable>
+
   </div>
 </template>
 
@@ -56,6 +32,8 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
+import TreeTable from 'primevue/treetable';
+import Column from 'primevue/column';
 
 const portfolio = ref(null);
 const showDetails = ref({});
@@ -71,6 +49,27 @@ const groupedAssets = computed(() => {
   let assetGroups = groupAssetsByClass(data.positions, data.total_value);
   // 그룹화된 자산군을 비중에 따라 정렬합니다.
   return sortAssetGroups(assetGroups);
+});
+
+const treeTableData = computed(() => {
+  return groupedAssets.value.map((group, index) => ({
+    key: `group-${index}`,
+    data: {
+      name: translateAssetClassName(group.name),
+      percentage: toPercentage(group.percentage),
+      total_value: toCurrency(group.total_value),
+      rtn: toPercentage(group.average_rtn)
+    },
+    children: group.positions.map((position, childIndex) => ({
+      key: `position-${index}-${childIndex}`,
+      data: {
+        name: position.asset.label,
+        percentage: toPercentage(calcWeight(position.total_amount, portfolio.value.total_value)),
+        total_value: toCurrency(position.total_amount),
+        rtn: toPercentage(position.rtn)
+      }
+    }))
+  }));
 });
 
 
@@ -201,39 +200,6 @@ function getColorForAssetClass(assetClass) {
 </script>
 
 <style>
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  border: 1px solid #ddd;
-  text-align: left;
-  padding: 8px;
-}
-
-th {
-  background-color: #f2f2f2;
-}
-
-tr.group:hover {
-  background-color: #f9f9f9;
-  cursor: pointer;
-}
-
-.asset-count {
-  color: #888;
-  font-size: 0.9em;
-}
-
-.icon-space {
-  color: #888;
-
-  margin-right: 16px;
-  /* 오른쪽에 8px 간격 추가 */
-}
-
 .segmented-bar-container {
   display: flex;
   width: 100%;
