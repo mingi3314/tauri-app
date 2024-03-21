@@ -1,13 +1,48 @@
+<template>
+  <div class="account-form">
+    <form @submit.prevent="submitAccount" class="p-fluid">
+      <div class="p-field">
+        <label for="brokerage">증권사</label>
+        <Dropdown id="brokerage" v-model="accountData.brokerage" :options="brokerages" optionLabel="name"
+          optionValue="value" placeholder="증권사를 선택해주세요." />
+      </div>
+      <div class="p-field">
+        <label for="appKey">APP_KEY</label>
+        <InputText id="appKey" v-model="accountData.app_key" type="password" />
+      </div>
+      <div class="p-field">
+        <label for="secretKey">SECRET_KEY</label>
+        <InputText id="secretKey" v-model="accountData.secret_key" type="password" />
+      </div>
+      <div class="p-formgrid p-grid">
+        <div class="p-field p-col">
+          <Button label="계좌 등록하기" type="submit" />
+        </div>
+      </div>
+      <p v-if="accountSubmissionResultMessage">{{ accountSubmissionResultMessage }}</p>
+    </form>
+  </div>
+</template>
+
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive } from 'vue';
 import axios from 'axios';
+import InputText from 'primevue/inputtext';
+import Dropdown from 'primevue/dropdown';
+import Button from 'primevue/button';
+
 
 const emit = defineEmits(['btn-close-clicked']);
 
+const brokerages = [
+  { name: '이베스트', value: 'ebest' },
+  { name: '한국투자증권', value: 'korea_investment' },
+];
+
 const accountData = reactive({
-  brokerage: '',
+  brokerage: null,
   app_key: '',
-  secret_key: ''
+  secret_key: '',
 });
 
 const accountSubmissionResultMessage = ref('');
@@ -23,56 +58,10 @@ async function submitAccount() {
   }
 }
 
-function btnCloseClicked() {
-  emit('btn-close-clicked');
-}
 </script>
 
-<template>
-  <div>
-    <form @submit.prevent="submitAccount">
-      <div>
-        <label for="brokerage">증권사: </label>
-        <select id="brokerage" v-model="accountData.brokerage" required>
-          <option disabled value="">증권사를 선택해주세요.</option>
-          <option value="ebest">이베스트</option>
-          <option value="korea_investment">한국투자증권</option>
-        </select>
-      </div>
-      <div>
-        <label for="appKey">APP_KEY:</label>
-        <input id="appKey" v-model="accountData.app_key" type="password" required>
-      </div>
-      <div>
-        <label for="secretKey">SECRET_KEY:</label>
-        <input id="secretKey" v-model="accountData.secret_key" type="password" required>
-      </div>
-      <div class="button-group">
-        <button @click="btnCloseClicked">닫기</button>
-        <button type="submit">계좌 등록</button>
-      </div>
-      <p v-if="accountSubmissionResultMessage">{{ accountSubmissionResultMessage }}</p>
-    </form>
-  </div>
-</template>
-
-<style>
-input {
-  margin-right: 10px;
-  /* 상하좌우 마진 설정 */
-  width: calc(100% - 20px);
-  /* 양쪽 마진을 고려한 너비 설정 */
-}
-
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.button-group button {
-  flex: 1;
-  /* 버튼들이 동일한 너비를 가지도록 설정 */
-  margin: 5px;
+<style scoped>
+.p-field {
+  margin-bottom: 20px;
 }
 </style>

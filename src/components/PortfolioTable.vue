@@ -36,7 +36,6 @@ import TreeTable from 'primevue/treetable';
 import Column from 'primevue/column';
 
 const portfolio = ref(null);
-const showDetails = ref({});
 
 onMounted(async () => {
   portfolio.value = await fetchPortfolioData();
@@ -72,14 +71,6 @@ const treeTableData = computed(() => {
   }));
 });
 
-
-function toggleGroup(groupName) {
-  showDetails.value[groupName] = !showDetails.value[groupName];
-}
-
-function isVisible(groupName) {
-  return !!showDetails.value[groupName];
-}
 
 
 // 숫자를 통화 형식으로 변환
