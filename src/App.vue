@@ -1,46 +1,30 @@
 <script setup>
 import { ref } from 'vue';
-import Modal from './components/Modal.vue';
 import Account from './components/Account.vue';
 import Rebalance from './components/Rebalance.vue';
 import PortfolioTable from './components/PortfolioTable.vue';
-
+import Dialog from 'primevue/dialog';
+import Button from 'primevue/button';
 
 const isAccountModalOpen = ref(false);
 const isRebalanceModalOpen = ref(false);
-
-function openAccountModal() {
-  isAccountModalOpen.value = true;
-}
-
-function closeAccountModal() {
-  isAccountModalOpen.value = false;
-}
-
-function openRebalanceModal() {
-  isRebalanceModalOpen.value = true;
-}
-
-function closeRebalanceModal() {
-  isRebalanceModalOpen.value = false;
-}
 </script>
 
 <template>
   <div id="app">
 
     <div class="button-container">
-      <button @click="openAccountModal">계좌 등록하기</button>
-      <button @click="openRebalanceModal">리밸런싱 실행</button>
+      <Button label="계좌 등록하기" @click="isAccountModalOpen = true" />
+      <Button label="리밸런싱 실행" @click="isRebalanceModalOpen = true" />
     </div>
 
-    <Modal v-if="isAccountModalOpen" @on-backdrop-clicked="closeAccountModal" ref="accountModal">
-      <Account @btn-close-clicked="closeAccountModal" />
-    </Modal>
+    <Dialog v-model:visible="isAccountModalOpen" modal header="계좌 등록">
+      <Account />
+    </Dialog>
 
-    <Modal v-if="isRebalanceModalOpen" @on-backdrop-clicked="closeRebalanceModal" ref="rebalanceModal">
-      <Rebalance @btn-close-clicked="closeRebalanceModal" />
-    </Modal>
+    <Dialog v-model:visible="isRebalanceModalOpen" modal header="주문 확인">
+      <Rebalance @btn-close-clicked="isRebalanceModalOpen = false" />
+    </Dialog>
 
     <PortfolioTable />
   </div>
