@@ -39,7 +39,7 @@ const isRebalanceModalOpen = ref(false);
   /* 상단 및 우측 여백 */
 }
 
-.button-container button {
+.p-button {
   margin-left: 20px;
   /* 버튼 사이 여백 */
 }
