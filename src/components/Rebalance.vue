@@ -31,17 +31,20 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import axios from 'axios';
 
 const orders = ref([]);
-fetchOrders();
+
+onMounted(async () => {
+    orders.value = await fetchOrders();
+})
 
 async function fetchOrders() {
     try {
         const response = await axios.get('http://localhost:8000/strategies/all-weather-kr/orders');
-        orders.value = response.data.orders;
         console.log(response.data); // 성공 응답 처리
+        return response.data.orders;
     } catch (error) {
         console.error('계좌 등록에 실패했습니다:', error);
     }
