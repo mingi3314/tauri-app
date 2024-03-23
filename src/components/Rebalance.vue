@@ -1,40 +1,37 @@
 <template>
     <div>
-        <h2>주문 확인</h2>
         <div v-if="orders.length">
-            <table>
-                <!-- 테이블 헤더 -->
-                <thead>
-                    <tr>
-                        <th>상품</th>
-                        <th>가격</th>
-                        <th>수량</th>
-                        <th>매매 유형</th>
-                    </tr>
-                </thead>
-                <!-- 테이블 바디 -->
-                <tbody>
-                    <tr v-for="order in orders" :key="order.symbol">
-                        <td>{{ order.symbol }}</td>
-                        <td>{{ order.price }}</td>
-                        <td>{{ order.quantity }}</td>
-                        <td>{{ order.side }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <DataTable :value="ordersTableData">
+                <Column field="symbol" header="종목코드"></Column>
+                <Column field="price" header="가격"></Column>
+                <Column field="quantity" header="수량"></Column>
+                <Column field="side" header="종류"></Column>
+            </DataTable>
         </div>
         <div v-else>주문 불러오는중...</div>
-        <div class="button-group">
-            <button @click="placeOrders">주문 실행</button>
+        <div class="button-container p-fluid">
+            <Button label="주문 실행" @click="placeOrders"></Button>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import axios from 'axios';
+import Button from "primevue/button";
+import Column from "primevue/column";
+import DataTable from "primevue/datatable";
+import { toCurrency } from "./utils";
 
 const orders = ref([]);
+const ordersTableData = computed(() => {
+    return orders.value.map(order => ({
+        symbol: order.symbol,
+        price: toCurrency(order.price),
+        quantity: order.quantity,
+        side: order.side === 'SELL' ? '매도' : '매수'
+    }));
+});
 
 onMounted(async () => {
     orders.value = await fetchOrders();
@@ -61,3 +58,10 @@ async function placeOrders() {
 </script>
 
 
+<style scoped>
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+</style>
