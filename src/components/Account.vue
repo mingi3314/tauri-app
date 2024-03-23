@@ -1,23 +1,21 @@
 <template>
-  <div class="account-form">
-    <form @submit.prevent="submitAccount" class="p-fluid">
-      <div class="p-field">
-        <label for="brokerage">증권사</label>
+  <div class="container">
+    <form @submit.prevent="submitAccount">
+      <div class="container">
+        <label for="brokerage" class="label">증권사</label>
         <Dropdown id="brokerage" v-model="accountData.brokerage" :options="brokerages" optionLabel="name"
           optionValue="value" placeholder="증권사를 선택해주세요." />
       </div>
-      <div class="p-field">
-        <label for="appKey">APP_KEY</label>
-        <InputText id="appKey" v-model="accountData.app_key" type="password" />
+      <div class="container">
+        <label for="appKey" class="label">APP_KEY</label>
+        <InputText id="appKey" v-model="accountData.app_key" type="password" required />
       </div>
-      <div class="p-field">
-        <label for="secretKey">SECRET_KEY</label>
-        <InputText id="secretKey" v-model="accountData.secret_key" type="password" />
+      <div class="container">
+        <label for="secretKey" class="label">SECRET_KEY</label>
+        <InputText id="secretKey" v-model="accountData.secret_key" type="password" required />
       </div>
-      <div class="p-formgrid p-grid">
-        <div class="p-field p-col">
-          <Button label="계좌 등록하기" type="submit" />
-        </div>
+      <div class="button-group">
+        <Button label="계좌 등록하기" />
       </div>
       <p v-if="accountSubmissionResultMessage">{{ accountSubmissionResultMessage }}</p>
     </form>
@@ -27,12 +25,9 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import axios from 'axios';
-import InputText from 'primevue/inputtext';
-import Dropdown from 'primevue/dropdown';
-import Button from 'primevue/button';
-
-
-const emit = defineEmits(['btn-close-clicked']);
+import InputText from 'primevue/inputtext'; // Import for input fields
+import Dropdown from 'primevue/dropdown'; // Import for select
+import Button from 'primevue/button'; // Import for buttons
 
 const brokerages = [
   { name: '이베스트', value: 'ebest' },
@@ -61,7 +56,29 @@ async function submitAccount() {
 </script>
 
 <style scoped>
-.p-field {
-  margin-bottom: 20px;
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: 1rem;
+
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.p-dropdown {
+  width: 68%;
 }
 </style>
