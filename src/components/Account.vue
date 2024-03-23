@@ -14,7 +14,7 @@
         <label for="secretKey" class="label">SECRET_KEY</label>
         <InputText id="secretKey" v-model="accountData.secret_key" type="password" required />
       </div>
-      <div class="button-group">
+      <div class="button-container p-fluid">
         <Button label="계좌 등록하기" />
       </div>
       <p v-if="accountSubmissionResultMessage">{{ accountSubmissionResultMessage }}</p>
@@ -71,11 +71,10 @@ async function submitAccount() {
 
 }
 
-.button-group {
+.button-container {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .p-dropdown {
