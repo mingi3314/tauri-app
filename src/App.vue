@@ -23,7 +23,7 @@ const isRebalanceModalOpen = ref(false);
     </Dialog>
 
     <Dialog v-model:visible="isRebalanceModalOpen" modal header="주문 확인">
-      <Rebalance @btn-close-clicked="isRebalanceModalOpen = false" />
+      <Rebalance />
     </Dialog>
 
     <PortfolioTable />

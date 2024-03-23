@@ -25,17 +25,15 @@
         </div>
         <div v-else>주문 불러오는중...</div>
         <div class="button-group">
-            <button @click="btnCloseClicked">닫기</button>
             <button @click="placeOrders">주문 실행</button>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import axios from 'axios';
 
-const emit = defineEmits(['btn-close-clicked']);
 const orders = ref([]);
 fetchOrders();
 
@@ -56,10 +54,6 @@ async function placeOrders() {
     } catch (error) {
         console.error('계좌 등록에 실패했습니다:', error);
     }
-}
-
-function btnCloseClicked() {
-    emit('btn-close-clicked');
 }
 </script>
 
