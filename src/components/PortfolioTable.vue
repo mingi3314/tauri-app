@@ -2,29 +2,19 @@
   <div>
     <h2>포트폴리오</h2>
     <p v-if="portfolio">총 가치: {{ toCurrency(portfolio.total_value) }}</p>
-    <div class="segmented-bar-container">
-      <!-- 자산군별 비중을 나타내는 각 세그먼트 -->
-      <div v-for="group in groupedAssets" :key="group.name" class="segmented-bar"
-        :style="{ width: group.percentage * 100 + '%', backgroundColor: getColorForAssetClass(group.name), 'border-radius': '5px' }"
-        :title="`${translateAssetClassName(group.name)}: ${toPercentage(group.percentage)}`"
-        :data-label="`${translateAssetClassName(group.name)}: ${toPercentage(group.percentage)}`">
+    <Panel>
+      <div class="portfolio-meter-group">
+        <MeterGroup :value="meterValues" labelPosition="end" labelOrientation="horizontal" />
       </div>
-    </div>
-
-    <div class="asset-labels">
-      <span v-for="group in groupedAssets" :key="group.name" class="asset-label">
-        <span class="color-indicator" :style="{ backgroundColor: getColorForAssetClass(group.name) }"></span>
-        {{ translateAssetClassName(group.name) }}: {{ toPercentage(group.percentage) }}
-      </span>
-    </div>
-
-    <TreeTable :value="treeTableData">
-      <Column field="name" header="이름" expander></Column>
-      <Column field="percentage" header="비중"></Column>
-      <Column field="total_value" header="가치"></Column>
-      <Column field="rtn" header="수익률"></Column>
-    </TreeTable>
-
+      <Panel>
+        <TreeTable :value="treeTableData">
+          <Column field="name" header="이름" expander></Column>
+          <Column field="percentage" header="비중"></Column>
+          <Column field="total_value" header="가치"></Column>
+          <Column field="rtn" header="수익률"></Column>
+        </TreeTable>
+      </Panel>
+    </Panel>
   </div>
 </template>
 
@@ -33,7 +23,10 @@
 import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 import TreeTable from 'primevue/treetable';
+import MeterGroup from 'primevue/metergroup';
+import Panel from 'primevue/panel';
 import Column from 'primevue/column';
+import { toCurrency, toPercentage } from './utils';
 
 const portfolio = ref(null);
 
@@ -71,17 +64,13 @@ const treeTableData = computed(() => {
   }));
 });
 
-
-
-// 숫자를 통화 형식으로 변환
-function toCurrency(value) {
-  return value.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
-}
-
-// 수익률을 백분율로 변환
-function toPercentage(value) {
-  return `${(value * 100).toFixed(2)}%`;
-}
+const meterValues = computed(() => {
+  return groupedAssets.value.map(group => ({
+    label: translateAssetClassName(group.name),
+    color: getColorForAssetClass(group.name),
+    value: group.percentage * 100 // Convert to a 0-100 scale for MeterGroup
+  }));
+});
 
 function calcWeight(value, total) {
   return value / total;
@@ -191,38 +180,16 @@ function getColorForAssetClass(assetClass) {
 </script>
 
 <style>
-.segmented-bar-container {
-  display: flex;
-  width: 100%;
-  height: 10px;
-  gap: 4px;
-  background-color: #ecf0f1;
-  /* 기본 배경 색상, 필요에 따라 조정 */
-  border-radius: 5px;
-  overflow: hidden;
+.p-panel {
+  padding: 0.5rem 0;
 }
 
-.color-indicator {
-  height: 10px;
-  width: 10px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 8px;
-  /* 라벨과의 간격 */
+.p-panel-header {
+  padding-top: 0;
 }
 
-.asset-labels {
-  display: flex;
-  gap: 20px;
-  padding-top: 4px;
-  margin-bottom: 8px;
-}
-
-.asset-label {
-  font-size: 0.8em;
-  color: #666;
-  display: flex;
-  align-items: center;
-  /* 중앙 정렬 */
+.portfolio-meter-group {
+  /* margin-top: 0.5rem; */
+  margin-bottom: 2rem;
 }
 </style>

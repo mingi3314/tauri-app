@@ -30,7 +30,7 @@ const isRebalanceModalOpen = ref(false);
   </div>
 </template>
 
-<style>
+<style scoped>
 .button-container {
   display: flex;
   justify-content: flex-end;
