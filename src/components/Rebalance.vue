@@ -12,6 +12,10 @@
         <div class="button-container p-fluid">
             <Button label="주문 실행" @click="placeOrders"></Button>
         </div>
+
+        <div class="w-full text-center mt-3">
+            <span class="p-text-secondary">모든 주문은 시장가 주문으로 제출됩니다.</span>
+        </div>
     </div>
 </template>
 
