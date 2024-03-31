@@ -12,8 +12,7 @@ const isRebalanceModalOpen = ref(false);
 
 <template>
   <div id="app">
-
-    <div class="button-container">
+    <div class="flex justify-content-end p-3 gap-3">
       <Button label="계좌 등록하기" @click="isAccountModalOpen = true" />
       <Button label="리밸런싱 실행" @click="isRebalanceModalOpen = true" />
     </div>
@@ -30,17 +29,4 @@ const isRebalanceModalOpen = ref(false);
   </div>
 </template>
 
-<style scoped>
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-  /* 우측 정렬 */
-  padding: 20px;
-  /* 상단 및 우측 여백 */
-}
-
-.p-button {
-  margin-left: 20px;
-  /* 버튼 사이 여백 */
-}
-</style>
+<style scoped></style>
