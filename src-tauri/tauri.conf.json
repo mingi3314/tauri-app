@@ -57,9 +57,10 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "tauri-app",
-        "width": 800,
-        "height": 600
+        "title": "ARB",
+        "width": 1280,
+        "height": 800,
+        "center": true
       }
     ]
   }
