@@ -15,7 +15,7 @@
         <InputText id="secretKey" v-model="accountData.secret_key" type="password" required />
       </div>
       <div class="button-container p-fluid">
-        <Button label="계좌 등록하기" />
+        <Button type="submit" label="계좌 등록하기" />
       </div>
       <p v-if="accountSubmissionResultMessage">{{ accountSubmissionResultMessage }}</p>
     </form>
