@@ -1,19 +1,21 @@
 <template>
   <div>
-    <h2>포트폴리오</h2>
-    <p v-if="portfolio">총 가치: {{ toCurrency(portfolio.total_value) }}</p>
-    <Panel>
-      <div class="portfolio-meter-group">
-        <MeterGroup :value="meterValues" labelPosition="end" labelOrientation="horizontal" />
-      </div>
-      <Panel>
-        <TreeTable :value="treeTableData">
-          <Column field="name" header="이름" expander></Column>
-          <Column field="percentage" header="비중"></Column>
-          <Column field="total_value" header="가치"></Column>
-          <Column field="rtn" header="수익률"></Column>
-        </TreeTable>
-      </Panel>
+    <h1>포트폴리오</h1>
+    <div class="portfolio-meter-group">
+      <MeterGroup :value="meterValues" labelPosition="end" labelOrientation="horizontal" />
+    </div>
+    <Panel v-if="portfolio">
+      <TreeTable :value="treeTableData">
+        <Column class="w-5" field="name" header="이름" expander></Column>
+        <Column field="percentage" header="비중"></Column>
+        <Column field="total_value" header="가치"></Column>
+        <Column field="rtn" header="수익률"></Column>
+        <template #footer>
+          <div class="right-0">
+            <span>{{ toCurrency(portfolio.total_value) }}</span>
+          </div>
+        </template>
+      </TreeTable>
     </Panel>
   </div>
 </template>
