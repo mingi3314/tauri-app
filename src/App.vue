@@ -11,7 +11,7 @@ const isRebalanceModalOpen = ref(false);
 </script>
 
 <template>
-  <div id="app">
+  <div class="mx-5" id="app">
     <div class="flex justify-content-end p-3 gap-3">
       <Button label="계좌 등록하기" @click="isAccountModalOpen = true" />
       <Button label="리밸런싱 실행" @click="isRebalanceModalOpen = true" />
@@ -28,5 +28,3 @@ const isRebalanceModalOpen = ref(false);
     <PortfolioTable />
   </div>
 </template>
-
-<style scoped></style>
